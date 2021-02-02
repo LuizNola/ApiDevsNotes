@@ -26,13 +26,30 @@ module.exports = {
         if(note){
             json.result = note;
         }else{
-            
+
         }
 
         res.json(json);
     },
-    new: async ()=>{
+    new: async (req, res)=>{
+        let json = {error:'',result:{}};
+        
+        let title = req.body.title;
+        let body = req.body.body;
 
+        if(title && body){
+            let noteId = await NoteService.new(title, body);
+            json.result= ({
+                id: noteId,
+                title,
+                body
+            })
+
+        }else{
+            json.error= "Campos não enviados!"
+        }
+
+        res.json(json);
     },
     edit: async ()=>{
 
