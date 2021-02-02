@@ -46,5 +46,17 @@ module.exports = {
         resolve(result);
       })
     });
+  },
+  delete: (id) => {
+    return new Promise((resolve, reject) => {
+
+      db.query('DELETE FROM notes_tb WHERE id = ?', [id], (error, result) => {
+        if (error) { reject(error); return; }
+
+        resolve(result);
+      })
+
+    });
+
   }
 };
