@@ -37,5 +37,14 @@ module.exports = {
       });
 
     });
+  },
+
+  update: (id, title, body)=>{
+    return new Promise((resolve, reject) => {
+      db.query('UPDATE notes_tb SET title = ?, body = ? WHERE id = ?', [title, body, id], (error, result) => {
+        if (error) { reject(error); return; }
+        resolve(result);
+      })
+    });
   }
 };
