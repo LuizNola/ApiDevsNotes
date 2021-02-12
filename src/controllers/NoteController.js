@@ -11,46 +11,44 @@ module.exports = {
         for (let i in notes) {
             json.result.push({
                 id: notes[i].id,
-                title: notes[i].title
+                title: notes[i].title,
+                body: notes[i].body
             })
         }
 
         res.json(json);
     },
-    one: async (req, res) => {
-        let json = { error: '', result: {} };
 
-        let id = req.params.id;
-        let note = await NoteService.findById(id);
-
-        if (note) {
-            json.result = note;
-        } else {
-
-        }
-
-        res.json(json);
-    },
     new: async (req, res) => {
-        let json = { error: '', result: {} };
+        let json = {error:'', result:{}}
+        let title = req.body.title
+        let body = req.body.body
 
-        let title = req.body.title;
-        let body = req.body.body;
+        if(title && body){
 
-        if (title && body) {
-            let noteId = await NoteService.new(title, body);
-            json.result = ({
+            let noteId = await NoteService.add(title, body)
+
+            json.result = {
                 id: noteId,
                 title,
                 body
-            })
+            }
 
-        } else {
-            json.error = "Campos não enviados!"
+
+        }else{
+            json.error = 'Campos não enviados'
+            
+            json.result = {
+           
+                title,
+                body
+            }
         }
 
-        res.json(json);
+
+        res.json(json)
     },
+
     edit: async (req, res) => {
         let json = { error: '', result: {} };
 
@@ -73,6 +71,7 @@ module.exports = {
 
         res.json(json);
     },
+    
     delete: async (req, res) => {
         let json = { error: '', result: {} };
         await NoteService.delete(req.params.id)
